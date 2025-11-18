@@ -4,6 +4,8 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { AddressVerificationService } from './address-verification.service';
+import { AddressVerificationController } from './address-verification.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UsersModule } from '../users/users.module';
@@ -23,8 +25,8 @@ import { UsersModule } from '../users/users.module';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
-  exports: [AuthService],
+  controllers: [AuthController, AddressVerificationController],
+  providers: [AuthService, AddressVerificationService, JwtStrategy, LocalStrategy],
+  exports: [AuthService, AddressVerificationService],
 })
 export class AuthModule {}
