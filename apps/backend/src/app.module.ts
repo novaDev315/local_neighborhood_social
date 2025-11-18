@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { CommonModule } from './common/common.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { NeighborhoodsModule } from './modules/neighborhoods/neighborhoods.module';
@@ -50,6 +51,9 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
       ],
       inject: [ConfigService],
     }),
+
+    // Common module (Redis, WebSocket, FileUpload)
+    CommonModule,
 
     // Feature modules
     AuthModule,
