@@ -1,0 +1,54 @@
+# Production Dockerfile for NestJS Backend
+
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY packages/shared/package*.json ./packages/shared/
+COPY apps/backend/package*.json ./apps/backend/
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY packages/shared ./packages/shared
+COPY apps/backend ./apps/backend
+COPY tsconfig.json ./
+
+# Build shared package
+WORKDIR /app/packages/shared
+RUN npm run build
+
+# Build backend
+WORKDIR /app/apps/backend
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dumb-init to handle signals properly
+RUN apk add --no-cache dumb-init
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001
+
+# Copy built application
+COPY --from=builder --chown=nestjs:nodejs /app/apps/backend/dist ./dist
+COPY --from=builder --chown=nestjs:nodejs /app/apps/backend/node_modules ./node_modules
+COPY --from=builder --chown=nestjs:nodejs /app/packages/shared/dist ./shared
+COPY --from=builder --chown=nestjs:nodejs /app/apps/backend/package*.json ./
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3001
+
+USER nestjs
+
+EXPOSE 3001
+
+# Use dumb-init to run the application
+CMD ["dumb-init", "node", "dist/main"]
