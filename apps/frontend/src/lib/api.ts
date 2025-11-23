@@ -94,3 +94,85 @@ export const businessesApi = {
   getAll: () => api.get('/businesses'),
   getOne: (id: string) => api.get(`/businesses/${id}`),
 };
+
+// Messages API
+export const messagesApi = {
+  getConversations: () => api.get('/messages/conversations'),
+  getConversation: (id: string) => api.get(`/messages/conversations/${id}`),
+  sendMessage: (data: { recipientId: string; content: string }) =>
+    api.post('/messages', data),
+  markAsRead: (id: string) => api.patch(`/messages/${id}/read`),
+  getUnreadCount: () => api.get('/messages/unread-count'),
+};
+
+// Lost & Found API
+export const lostFoundApi = {
+  getAll: (params?: { type?: string; status?: string }) =>
+    api.get('/lost-found', { params }),
+  getOne: (id: string) => api.get(`/lost-found/${id}`),
+  create: (data: any) => api.post('/lost-found', data),
+  update: (id: string, data: any) => api.patch(`/lost-found/${id}`, data),
+  delete: (id: string) => api.delete(`/lost-found/${id}`),
+  addSighting: (id: string, data: any) => api.post(`/lost-found/${id}/sightings`, data),
+  markReunited: (id: string) => api.patch(`/lost-found/${id}/reunited`),
+};
+
+// Recommendations API
+export const recommendationsApi = {
+  getAll: (params?: { category?: string }) =>
+    api.get('/recommendations', { params }),
+  getOne: (id: string) => api.get(`/recommendations/${id}`),
+  create: (data: any) => api.post('/recommendations', data),
+  addReview: (id: string, data: { rating: number; comment: string }) =>
+    api.post(`/recommendations/${id}/reviews`, data),
+  search: (query: string) => api.get('/recommendations/search', { params: { q: query } }),
+};
+
+// Lending Library API
+export const lendingApi = {
+  getItems: (params?: { category?: string; status?: string }) =>
+    api.get('/lending/items', { params }),
+  getItem: (id: string) => api.get(`/lending/items/${id}`),
+  createItem: (data: any) => api.post('/lending/items', data),
+  updateItem: (id: string, data: any) => api.patch(`/lending/items/${id}`, data),
+  deleteItem: (id: string) => api.delete(`/lending/items/${id}`),
+  requestBorrow: (itemId: string, data: { startDate: string; endDate: string; message?: string }) =>
+    api.post(`/lending/items/${itemId}/borrow`, data),
+  getMyRequests: () => api.get('/lending/my-requests'),
+  getMyItems: () => api.get('/lending/my-items'),
+  approveRequest: (id: string) => api.patch(`/lending/requests/${id}/approve`),
+  rejectRequest: (id: string) => api.patch(`/lending/requests/${id}/reject`),
+  returnItem: (id: string) => api.patch(`/lending/requests/${id}/return`),
+};
+
+// Pets API
+export const petsApi = {
+  getAll: (params?: { type?: string }) => api.get('/pets', { params }),
+  getOne: (id: string) => api.get(`/pets/${id}`),
+  create: (data: any) => api.post('/pets', data),
+  update: (id: string, data: any) => api.patch(`/pets/${id}`, data),
+  delete: (id: string) => api.delete(`/pets/${id}`),
+  getMyPets: () => api.get('/pets/user/my-pets'),
+  getPlaydates: (params?: { petType?: string }) =>
+    api.get('/pets/playdates/upcoming', { params }),
+  createPlaydate: (data: any) => api.post('/pets/playdates', data),
+};
+
+// Volunteers API
+export const volunteersApi = {
+  getOpportunities: (params?: { category?: string }) =>
+    api.get('/volunteers/opportunities', { params }),
+  getOpportunity: (id: string) => api.get(`/volunteers/opportunities/${id}`),
+  createOpportunity: (data: any) => api.post('/volunteers/opportunities', data),
+  updateOpportunity: (id: string, data: any) =>
+    api.patch(`/volunteers/opportunities/${id}`, data),
+  deleteOpportunity: (id: string) => api.delete(`/volunteers/opportunities/${id}`),
+  signup: (id: string) => api.post(`/volunteers/opportunities/${id}/signup`),
+  cancelSignup: (id: string) => api.delete(`/volunteers/opportunities/${id}/signup`),
+  getSignups: (id: string) => api.get(`/volunteers/opportunities/${id}/signups`),
+  getMySignups: () => api.get('/volunteers/my-signups'),
+  logHours: (id: string, hours: number) =>
+    api.post(`/volunteers/signups/${id}/hours`, { hours }),
+  getMyStats: () => api.get('/volunteers/my-stats'),
+  getLeaderboard: () => api.get('/volunteers/leaderboard'),
+};

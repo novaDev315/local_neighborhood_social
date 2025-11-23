@@ -13,6 +13,12 @@ import { BusinessesModule } from './modules/businesses/businesses.module';
 import { GroupsModule } from './modules/groups/groups.module';
 import { SafetyAlertsModule } from './modules/safety-alerts/safety-alerts.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { MessagesModule } from './modules/messages/messages.module';
+import { LostFoundModule } from './modules/lost-found/lost-found.module';
+import { RecommendationsModule } from './modules/recommendations/recommendations.module';
+import { LendingModule } from './modules/lending/lending.module';
+import { PetsModule } from './modules/pets/pets.module';
+import { VolunteersModule } from './modules/volunteers/volunteers.module';
 
 @Module({
   imports: [
@@ -66,6 +72,12 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     GroupsModule,
     SafetyAlertsModule,
     NotificationsModule,
+    MessagesModule,
+    LostFoundModule,
+    RecommendationsModule,
+    LendingModule,
+    PetsModule,
+    VolunteersModule,
   ],
 })
 export class AppModule {}
