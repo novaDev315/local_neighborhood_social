@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Card, CardHeader, CardTitle, CardContent, Button, Input } from '@/components/ui';
 import { messagesApi } from '@/lib/api';
+import { useAuthStore } from '@/stores/authStore';
 import Link from 'next/link';
 
 interface Conversation {
@@ -25,6 +26,7 @@ interface Message {
 }
 
 export default function MessagesPage() {
+  const user = useAuthStore((state) => state.user);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState('');
@@ -55,9 +57,9 @@ export default function MessagesPage() {
   };
 
   const sendMessage = async () => {
-    if (!selectedConversation || !newMessage.trim()) return;
+    if (!selectedConversation || !newMessage.trim() || !user) return;
     try {
-      const otherParticipant = selectedConversation.participant1Id === localStorage.getItem('userId')
+      const otherParticipant = selectedConversation.participant1Id === user.id
         ? selectedConversation.participant2Id
         : selectedConversation.participant1Id;
       await messagesApi.sendMessage({ recipientId: otherParticipant, content: newMessage });
@@ -139,12 +141,12 @@ export default function MessagesPage() {
                         <div
                           key={msg.id}
                           className={`flex ${
-                            msg.senderId === localStorage.getItem('userId') ? 'justify-end' : 'justify-start'
+                            msg.senderId === user?.id ? 'justify-end' : 'justify-start'
                           }`}
                         >
                           <div
                             className={`max-w-xs px-4 py-2 rounded-lg ${
-                              msg.senderId === localStorage.getItem('userId')
+                              msg.senderId === user?.id
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
                             }`}

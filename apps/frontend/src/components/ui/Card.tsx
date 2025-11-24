@@ -20,7 +20,7 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-md border border-gray-200 ${paddingStyles[padding]} ${className}`}
+      className={`bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 ${paddingStyles[padding]} ${className}`}
     >
       {children}
     </div>
@@ -53,7 +53,7 @@ export const CardTitle: React.FC<CardTitleProps> = ({
   className = '',
 }) => {
   return (
-    <h2 className={`text-2xl font-bold text-gray-900 ${className}`}>
+    <h2 className={`text-2xl font-bold text-gray-900 dark:text-white ${className}`}>
       {children}
     </h2>
   );
